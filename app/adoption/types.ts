@@ -1,4 +1,4 @@
-// types.ts
+// types.ts in app/adoption/
 
 export interface Pet {
     id?: number;

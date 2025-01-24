@@ -1,3 +1,4 @@
+//Home component in app/
 import React from 'react';
 
 const Home: React.FC = () => {

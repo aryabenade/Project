@@ -1,4 +1,5 @@
-// NewAdoption component in app/adoption/new/page.tsx
+// app/adoption/new/page.tsx
+
 'use client';
 
 import React, { useState } from 'react';
@@ -18,11 +19,30 @@ const NewAdoption: React.FC = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Function to handle image upload
+  const handleImageUpload = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'my_upload_preset'); // Use your actual upload preset name
+    const response = await fetch('/api/uploadImage', {
+      method: 'POST',
+      body: formData,
+    });
+    const data = await response.json();
+    return data.url; // This is the URL of the uploaded image
+  };
+
+  // Function to handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !age || !category || !breed || !state || !city || !contact) {
       alert('Please fill out all fields.');
       return;
+    }
+
+    let imageUrl: string | null = null;
+    if (image) {
+      imageUrl = await handleImageUpload(image);
     }
 
     const newPet: Pet = {
@@ -33,7 +53,7 @@ const NewAdoption: React.FC = () => {
       state,
       city,
       contact,
-      image: image ? URL.createObjectURL(image) : null,
+      image: imageUrl,
     };
 
     try {

@@ -1,3 +1,4 @@
+//Profile component in app/profile/page.tsx
 import React from 'react';
 
 const Profile: React.FC = () => {
