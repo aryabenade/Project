@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'DELETE') {
+    // Handle deleting a pet
     const { id } = req.body;
     try {
       await prisma.pet.delete({

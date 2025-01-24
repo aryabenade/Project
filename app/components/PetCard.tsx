@@ -1,3 +1,4 @@
+//PetCard component in components/PetCard.tsx
 import React from 'react';
 
 interface PetCardProps {

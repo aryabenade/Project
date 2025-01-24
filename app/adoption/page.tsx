@@ -1,3 +1,4 @@
+// Adoption component in app/adoption/page.tsx
 "use client";
 import React, { useState, useEffect } from 'react';
 import PetCard from '../components/PetCard';
@@ -9,9 +10,17 @@ const Adoption: React.FC = () => {
 
   useEffect(() => {
     const fetchPets = async () => {
-      const response = await fetch('/api/pets');
-      const data: Pet[] = await response.json();
-      setPets(data);
+      try {
+        const response = await fetch('/api/pets');
+        if (response.ok) {
+          const data: Pet[] = await response.json();
+          setPets(data);
+        } else {
+          console.error('Failed to fetch pets');
+        }
+      } catch (error) {
+        console.error('Error fetching pets:', error);
+      }
     };
 
     fetchPets();
@@ -33,9 +42,9 @@ const Adoption: React.FC = () => {
           <PetCard
             key={pet.id}
             name={pet.name}
-            breed={pet.breed}
             age={pet.age}
             category={pet.category}
+            breed={pet.breed}
             state={pet.state}
             city={pet.city}
             contact={pet.contact}
@@ -48,4 +57,3 @@ const Adoption: React.FC = () => {
 };
 
 export default Adoption;
-

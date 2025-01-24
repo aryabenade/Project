@@ -1,60 +1,62 @@
-
-
+// NewAdoption component in app/adoption/new/page.tsx
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation'; // Import from next/navigation
+import { useRouter } from 'next/navigation';
 import { Pet } from '../types';
 
-interface NewAdoptionProps {
-  onNewPet?: (pet: Pet) => void;
-}
-
-const NewAdoption: React.FC<NewAdoptionProps> = ({ onNewPet }) => {
+const NewAdoption: React.FC = () => {
   const router = useRouter();
   const [name, setName] = useState('');
-  const [breed, setBreed] = useState('');
   const [age, setAge] = useState('');
   const [category, setCategory] = useState('');
+  const [breed, setBreed] = useState('');
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
   const [contact, setContact] = useState('');
   const [image, setImage] = useState<File | null>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !breed || !age || !category || !state || !city || !contact) {
+    if (!name || !age || !category || !breed || !state || !city || !contact) {
       alert('Please fill out all fields.');
       return;
     }
 
     const newPet: Pet = {
       name,
-      breed,
       age: parseInt(age, 10),
       category,
+      breed,
       state,
       city,
       contact,
       image: image ? URL.createObjectURL(image) : null,
     };
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const response = await fetch('/api/pets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newPet),
+      });
 
-    // Show confirmation message
-    setFormSubmitted(true);
-
-    // Temporarily add new pet to the list (until backend integration)
-    if (onNewPet) {
-      onNewPet(newPet);
+      if (response.ok) {
+        setFormSubmitted(true);
+        setError(null);
+        // Redirect to adoption page after a short delay
+        setTimeout(() => {
+          router.push('/adoption');
+        }, 2000);
+      } else {
+        const errorMessage = await response.text();
+        setError(`Failed to post pet: ${errorMessage}`);
+      }
+    } catch (err) {
+      setError(`Failed to post pet: ${err instanceof Error ? err.message : 'An unknown error occurred'}`);
     }
-
-    // Redirect to adoption page after a short delay
-    setTimeout(() => {
-      router.push('/adoption');
-    }, 2000);
   };
 
   return (
@@ -66,6 +68,11 @@ const NewAdoption: React.FC<NewAdoptionProps> = ({ onNewPet }) => {
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="max-w-lg mx-auto mt-8">
+          {error && (
+            <div className="text-center text-red-500 text-lg mb-4">
+              {error}
+            </div>
+          )}
           <div className="mb-4">
             <label className="block text-lg mb-2" htmlFor="name">Pet Name</label>
             <input
@@ -163,5 +170,5 @@ const NewAdoption: React.FC<NewAdoptionProps> = ({ onNewPet }) => {
     </div>
   );
 };
-export default NewAdoption;
 
+export default NewAdoption;
