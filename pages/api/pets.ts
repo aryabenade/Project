@@ -1,3 +1,4 @@
+
 // pages/api/pets.ts
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from '@prisma/client';
@@ -6,8 +7,7 @@ const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    // Handle adding a new pet
-    const { name, age, category, breed, state, city, contact, image } = req.body;
+    const { name, age, category, breed, state, city, contact, image, userId } = req.body;
     try {
       const pet = await prisma.pet.create({
         data: {
@@ -19,6 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           city,
           contact,
           image,
+          userId,  // Include userId when creating a pet
         },
       });
       res.status(201).json(pet);
@@ -26,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.status(500).json({ error: "Failed to create pet" });
     }
   } else if (req.method === 'GET') {
-    // Handle fetching all pets
+    // Fetch all pets from the database
     try {
       const pets = await prisma.pet.findMany();
       res.status(200).json(pets);
@@ -37,3 +38,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(405).end(); // Method Not Allowed
   }
 }
+

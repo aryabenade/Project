@@ -1,29 +1,26 @@
-// Adoption component in app/adoption/page.tsx
+// AdoptAPet component in app/adopt-a-pet/page.tsx
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PetCard from '../components/PetCard';
-import Link from 'next/link';
-import { Pet } from './types';
-import { useUser } from '@clerk/nextjs';
-import { redirect } from 'next/navigation';
 import Navbar from '../components/Navbar';
+import { Pet } from '../types';
+import { useUser } from '@clerk/nextjs';
 
-
-const Adoption: React.FC = () => {
+const AdoptAPet: React.FC = () => {
   const [pets, setPets] = useState<Pet[]>([]);
+  const { user } = useUser();
 
-  const { user } = useUser()
-  if (!user) {
-    redirect('/sign-in')
-  }
-  
   useEffect(() => {
     const fetchPets = async () => {
       try {
         const response = await fetch('/api/pets');
         if (response.ok) {
           const data: Pet[] = await response.json();
-          setPets(data);
+          console.log('User ID:', user?.id); // Log the user ID
+          console.log('All pets:', data); // Log all fetched pets
+          const otherPets = data.filter(pet => pet.userId !== user?.id); // Filter out pets posted by the logged-in user
+          console.log('Filtered pets (not posted by user):', otherPets); // Log filtered pets
+          setPets(otherPets);
         } else {
           console.error('Failed to fetch pets');
         }
@@ -32,22 +29,16 @@ const Adoption: React.FC = () => {
       }
     };
 
-    fetchPets();
-  }, []);
+    if (user?.id) {
+      fetchPets();
+    }
+  }, [user?.id]);
 
   return (
     <div>
       <Navbar />
       <div className="container mx-auto p-4">
-        <h1 className="text-4xl font-bold text-center mt-10">Adoption</h1>
-        <p className="text-center mt-4 text-lg">
-          Browse and adopt pets or post your pet for adoption.
-        </p>
-        <div className="flex justify-center mt-8">
-          <Link href="/adoption/new" className="bg-blue-500 text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-blue-600">
-            Post a Pet for Adoption
-          </Link>
-        </div>
+        <h1 className="text-4xl font-bold text-center mt-10">Adopt a Pet</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
           {pets.map((pet) => (
             <PetCard
@@ -68,4 +59,4 @@ const Adoption: React.FC = () => {
   );
 };
 
-export default Adoption;
+export default AdoptAPet;

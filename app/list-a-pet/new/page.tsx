@@ -1,12 +1,13 @@
-// app/adoption/new/page.tsx
-
-'use client';
+// NewAdoptionForm component in app/list-a-pet/new/page.tsx
+"use client";
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Pet } from '../types';
+import { useUser } from '@clerk/nextjs';
+import { Pet } from '../../types';
 
-const NewAdoption: React.FC = () => {
+const NewAdoptionForm: React.FC = () => {
+  const { user } = useUser();
   const router = useRouter();
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
@@ -45,6 +46,11 @@ const NewAdoption: React.FC = () => {
       imageUrl = await handleImageUpload(image);
     }
 
+    if (!user?.id) {
+      setError('User is not authenticated');
+      return;
+    }
+
     const newPet: Pet = {
       name,
       age: parseInt(age, 10),
@@ -54,6 +60,7 @@ const NewAdoption: React.FC = () => {
       city,
       contact,
       image: imageUrl,
+      userId: user.id,  // Ensure userId is not undefined
     };
 
     try {
@@ -66,9 +73,8 @@ const NewAdoption: React.FC = () => {
       if (response.ok) {
         setFormSubmitted(true);
         setError(null);
-        // Redirect to adoption page after a short delay
         setTimeout(() => {
-          router.push('/adoption');
+          router.push('/list-a-pet');
         }, 2000);
       } else {
         const errorMessage = await response.text();
@@ -191,4 +197,4 @@ const NewAdoption: React.FC = () => {
   );
 };
 
-export default NewAdoption;
+export default NewAdoptionForm;

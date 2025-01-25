@@ -9,6 +9,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+
 model Pet {
   id       Int     @id @default(autoincrement())
   name     String
@@ -19,4 +21,6 @@ model Pet {
   city     String
   contact  String
   image    String?
+  userId   String  // Add this field to store Clerk user ID
 }
+
