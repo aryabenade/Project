@@ -1,8 +1,9 @@
-// Layout component in app/
+// Layout component in app/layout.tsx
 'use client';
-
+import {
+  ClerkProvider,
+} from '@clerk/nextjs'
 import React, { ReactNode } from 'react';
-import Navbar from './components/Navbar';
 import './styles/globals.css';
 
 interface LayoutProps {
@@ -11,13 +12,13 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-  
+  <ClerkProvider>
       <html lang="en">
         <body>
-          <Navbar />
           <main>{children}</main>
         </body>
       </html>
+  </ClerkProvider>
    
   );
 };
