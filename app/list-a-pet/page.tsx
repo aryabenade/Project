@@ -36,6 +36,28 @@ const ListAPet: React.FC = () => {
     fetchUserPets();
   }, [user?.id]);
 
+  const handleEdit = (pet: Pet) => {
+    // Navigate to the EditPetForm page with the pet ID
+    router.push(`/edit-pet/${pet.id}`);
+  };
+
+  const handleDelete = async (petId: number) => {
+    try {
+      const response = await fetch('/api/deletePet', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: petId }),
+      });
+      if (response.ok) {
+        setPets((prevPets) => prevPets.filter((pet) => pet.id !== petId));
+      } else {
+        console.error('Failed to delete pet');
+      }
+    } catch (error) {
+      console.error('Error deleting pet:', error);
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -63,6 +85,8 @@ const ListAPet: React.FC = () => {
                 city={pet.city}
                 contact={pet.contact}
                 image={pet.image}
+                onEdit={() => handleEdit(pet)}
+                onDelete={() => handleDelete(pet.id!)}
               />
             ))}
           </div>
@@ -73,4 +97,3 @@ const ListAPet: React.FC = () => {
 };
 
 export default ListAPet;
-
