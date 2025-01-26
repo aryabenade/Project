@@ -30,7 +30,7 @@ const Navbar: React.FC = () => {
           <SignedIn>
             <UserButton />
           </SignedIn>
-          <Toggle />
+          {/* <Toggle /> */}
         </div>
       </div>
     </nav>
@@ -38,5 +38,3 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
-
-

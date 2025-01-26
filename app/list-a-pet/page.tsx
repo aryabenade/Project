@@ -5,17 +5,18 @@ import PetCard from '../components/PetCard';
 import Link from 'next/link';
 import { Pet } from '../types';
 import { useUser } from '@clerk/nextjs';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import Navbar from '../components/Navbar';
 
 const ListAPet: React.FC = () => {
   const [pets, setPets] = useState<Pet[]>([]);
+  
   const { user } = useUser();
-  const router = useRouter();
+    if (!user) {
+      redirect('/sign-in')
+    }
 
-  if (!user) {
-    router.push('/sign-in');
-  }
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUserPets = async () => {

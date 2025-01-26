@@ -1,4 +1,4 @@
-// Layout component in app/layout.tsx
+//Layout component in app/layout.tsx
 'use client';
 import {
   ClerkProvider,
@@ -12,14 +12,13 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-  <ClerkProvider>
+    <ClerkProvider>
       <html lang="en">
         <body>
           <main>{children}</main>
         </body>
       </html>
-  </ClerkProvider>
-   
+    </ClerkProvider>
   );
 };
 

@@ -1,14 +1,19 @@
-// AdoptAPet component in app/adopt-a-pet/page.tsx
+// // AdoptAPet component in app/adopt-a-pet/page.tsx
 "use client";
 import React, { useEffect, useState } from 'react';
 import PetCard from '../components/PetCard';
 import Navbar from '../components/Navbar';
 import { Pet } from '../types';
 import { useUser } from '@clerk/nextjs';
+import { redirect } from 'next/navigation';
 
 const AdoptAPet: React.FC = () => {
   const [pets, setPets] = useState<Pet[]>([]);
   const { user } = useUser();
+  
+  if (!user) {
+    redirect('/sign-in');
+  }
 
   useEffect(() => {
     const fetchPets = async () => {
@@ -34,6 +39,11 @@ const AdoptAPet: React.FC = () => {
     }
   }, [user?.id]);
 
+  const handleAdopt = (petId: number) => {
+    console.log(`Adopting pet with ID: ${petId}`);
+    // Placeholder function: You can implement the adoption logic here
+  };
+
   return (
     <div>
       <Navbar />
@@ -51,6 +61,7 @@ const AdoptAPet: React.FC = () => {
               city={pet.city}
               contact={pet.contact}
               image={pet.image}
+              onAdopt={() => pet.id && handleAdopt(pet.id)} // Ensure pet.id is defined
             />
           ))}
         </div>

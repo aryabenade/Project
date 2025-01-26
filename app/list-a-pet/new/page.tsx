@@ -1,4 +1,4 @@
-// NewAdoptionForm component in app/list-a-pet/new/page.tsx
+// PetListingForm component in app/list-a-pet/new/page.tsx
 "use client";
 
 import React, { useState } from 'react';
@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import { Pet } from '../../types';
 
-const NewAdoptionForm: React.FC = () => {
+const PetListingForm: React.FC = () => {
   const { user } = useUser();
   const router = useRouter();
   const [name, setName] = useState('');
@@ -197,4 +197,4 @@ const NewAdoptionForm: React.FC = () => {
   );
 };
 
-export default NewAdoptionForm;
+export default PetListingForm;

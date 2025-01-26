@@ -16,7 +16,7 @@ const Home: React.FC = () => {
         </p>
         <div className="flex justify-center mt-8">
           <a
-            href="/adoption"
+            href="/sign-in"
             className="bg-blue-500 text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-blue-600"
           >
             Get Started
