@@ -172,6 +172,7 @@ const PetListingForm: React.FC = () => {
               id="contact"
               value={contact}
               onChange={(e) => setContact(e.target.value)}
+              placeholder="Enter your email"
               className="w-full p-2 border rounded-md"
               required
             />

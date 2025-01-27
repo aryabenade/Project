@@ -1,4 +1,4 @@
-// PetAdoptionForm component in app/adopt-a-pet/adopt/page.tsx
+// // PetAdoptionForm component in app/adopt-a-pet/adopt/page.tsx
 "use client";
 
 import React, { useEffect, useState } from 'react';
@@ -36,7 +36,7 @@ const PetAdoptionForm: React.FC = () => {
     }
 
     const adoptionRequest = {
-      petId,
+      petId: parseInt(petId, 10),  // Ensure petId is sent as an integer
       adopterId: user.id,
       fullName,
       phoneNumber,
@@ -55,7 +55,6 @@ const PetAdoptionForm: React.FC = () => {
       if (response.ok) {
         setFormSubmitted(true);
         setError(null);
-        // Redirect to the adoption page after form submission
         setTimeout(() => {
           router.push('/adopt-a-pet');
         }, 2000);
@@ -73,7 +72,7 @@ const PetAdoptionForm: React.FC = () => {
       <h1 className="text-4xl font-bold text-center mt-10">Adopt a Pet</h1>
       {formSubmitted ? (
         <div className="text-center text-green-500 text-lg mt-6">
-          Your adoption request has been submitted successfully!
+          Your form has been submitted successfully!
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="max-w-lg mx-auto mt-8">
@@ -153,4 +152,3 @@ const PetAdoptionForm: React.FC = () => {
 };
 
 export default PetAdoptionForm;
-
